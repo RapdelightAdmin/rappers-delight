@@ -11,7 +11,7 @@ function Header() {
         </Typography>
         <div style={{ flexGrow: 1 }} />
         <Button color="inherit" component={Link} to="/">Home</Button>
-        <Button color="inherit">About</Button>
+        <Button color="inherit" component={Link} to="/create">Create Stream</Button>
       </Toolbar>
     </AppBar>
   );

@@ -1,14 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, Paper } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { firestore } from '../firebase';
 
-const livestreams = [
-  { id: 'livestream1', title: 'Live Jam Session', artist: 'The Funky Bunch' },
-  { id: 'livestream2', title: 'Acoustic Set', artist: 'Sarah Sings' },
-  { id: 'livestream3', title: 'DJ Mix', artist: 'DJ Beatmaster' },
+const initialLivestreams = [
+  { title: 'Live Jam Session', artist: 'The Funky Bunch' },
+  { title: 'Acoustic Set', artist: 'Sarah Sings' },
+  { title: 'DJ Mix', artist: 'DJ Beatmaster' },
 ];
 
 function Home() {
+  const [livestreams, setLivestreams] = useState([]);
+
+  useEffect(() => {
+    const fetchAndSeed = async () => {
+      const livestreamsCollection = collection(firestore, 'livestreams');
+      const livestreamSnapshot = await getDocs(livestreamsCollection);
+      if (livestreamSnapshot.empty) {
+        // Seed the database if it's empty
+        for (const stream of initialLivestreams) {
+          await addDoc(livestreamsCollection, stream);
+        }
+      }
+      // Fetch the livestreams again after seeding (or if it was not empty)
+      const updatedLivestreamSnapshot = await getDocs(livestreamsCollection);
+      const livestreamList = updatedLivestreamSnapshot.docs.map(doc => ({...doc.data(), id: doc.id}));
+      setLivestreams(livestreamList);
+    };
+
+    fetchAndSeed();
+  }, []);
+
   return (
     <Box>
       <Typography variant="h4" gutterBottom sx={{ color: '#fff', fontWeight: 'bold', mb: 4 }}>
@@ -16,12 +39,12 @@ function Home() {
       </Typography>
       <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 3 }}>
         {livestreams.map((stream) => (
-          <Paper 
-            key={stream.id} 
-            sx={{ 
-              p: 3, 
-              borderRadius: '16px', 
-              background: '#1e1e1e', 
+          <Paper
+            key={stream.id}
+            sx={{
+              p: 3,
+              borderRadius: '16px',
+              background: '#1e1e1e',
               boxShadow: '0 8px 16px rgba(0,0,0,0.5)',
               transition: 'transform 0.3s',
               '&:hover': {
@@ -31,10 +54,10 @@ function Home() {
           >
             <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#fff' }}>{stream.title}</Typography>
             <Typography variant="body2" sx={{ color: '#ccc', mb: 2 }}>{stream.artist}</Typography>
-            <Button 
-              component={Link} 
-              to={`/livestream/${stream.id}`} 
-              variant="contained" 
+            <Button
+              component={Link}
+              to={`/livestream/${stream.id}`}
+              variant="contained"
               sx={{
                 background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
                 boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',

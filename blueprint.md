@@ -41,25 +41,28 @@ This document outlines the development plan for a mobile-first livestreaming app
     *   Added the `firebase` package to the project.
     *   Created a `src/firebase.js` file to initialize and configure Firebase. **(Note: Requires user to input their own Firebase project credentials).**
     *   Configured the necessary Firebase server settings in `.idx/mcp.json`.
-*   **Real-time Chat:**
-    *   Replaced the mock chat data in `Livestream.jsx` with a real-time chat powered by Firebase Realtime Database.
-    *   The chat now displays messages from the database in real-time.
-    *   Users can send new messages, which are then pushed to the Firebase database.
+*   **Chat Feature:**
+    *   Created `src/components/Chat.jsx` for handling chat messages, including real-time listening and sending functionality using Firebase Realtime Database.
+    *   Created `src/components/Chat.css` for styling the chat interface, ensuring a modern and responsive design.
+    *   Integrated the `Chat` component into `src/pages/Livestream.jsx`, replacing the previous inline chat implementation.
+    *   Added a "Request to Join" button to the chat, allowing viewers to request to join the livestream.
 *   **Video Streaming:**
     *   Installed the `agora-rtc-react` and `agora-rtc-sdk-ng` packages.
     *   Created a reusable `AgoraVideoPlayer` component in `src/components/AgoraVideoPlayer.jsx`.
     *   Integrated the `AgoraVideoPlayer` into the `Livestream.jsx` page.
-    *   **Note:** The Agora integration requires the user to provide their own Agora App ID and token.
+    *   Implemented multi-guest video streaming by dynamically adjusting the grid layout to accommodate multiple local and remote users, improving the visual presentation of participants during a livestream.
+    *   **Agora project is now connected. The user has been guided on how to add their App ID and token.**
+*   **Viewer Management:**
+    *   Created a `ViewerList` component to display a real-time list of viewers in the livestream.
+    *   Added a "Join Requests" section to the `Livestream` page where the host can accept or decline requests to join the stream.
+*   **Instrumental Feature:**
+    *   Implemented instrumental audio file uploads and integrated volume controls within the mixing console on the `Livestream` page.
+    *   Utilized the Web Audio API for decoding and playing uploaded instrumentals and managing audio gain for both instrumental and vocal tracks.
 *   **Code Quality & Cleanup:**
     *   Removed the unused `src/services/websocket.js` file.
     *   Fixed a missing dependency in a `useEffect` hook in `Livestream.jsx` and verified with the linter.
     *   Added an auto-scrolling feature to the chat window to keep the latest messages in view.
     *   Resolved linting errors in the `AgoraVideoPlayer` component.
-*   **Mixing Console:**
-    *   Added the ability to upload an instrumental audio file.
-    *   Used the Web Audio API to decode and play the uploaded instrumental.
-    *   Implemented volume controls for both the instrumental and vocals.
-    *   Connected the user's microphone to the mixing console to allow for real-time vocal processing.
 *   **Modern UI/UX:**
     *   Added the 'Rubik' and 'Roboto' fonts from Google Fonts.
     *   Created a custom dark theme using Material-UI.
@@ -67,3 +70,8 @@ This document outlines the development plan for a mobile-first livestreaming app
     *   Redesigned the `Livestream` page with a more modern, immersive layout.
     *   Redesigned the `Home` page with a clean, card-based layout.
     *   Updated the `Header` to match the new dark theme.
+*   **Testing Setup:**
+    *   Installed `vitest`, `@testing-library/react`, and `@testing-library/jest-dom` as development dependencies.
+    *   Configured `package.json` to include a `test` script that runs `vitest`.
+    *   Updated `vite.config.js` to configure Vitest with `globals: true`, `environment: 'jsdom'`, and `setupFiles: './src/setupTests.js'`.
+    *   Created `src/setupTests.js` to import `@testing-library/jest-dom` for extended Jest matchers.
