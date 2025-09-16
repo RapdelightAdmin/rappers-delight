@@ -1,4 +1,9 @@
 {
+  // This file is used to define the indexes for your Firestore database.
+  // Indexes are used to improve the performance of your queries.
+  // You can learn more about Firestore indexes here:
+  // https://firebase.google.com/docs/firestore/query-data/indexing
+
   // Example (Standard Edition):
   //
   // "indexes": [

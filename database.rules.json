@@ -1,1 +1,9 @@
-{"rules": {".read": true, ".write": true}}
+{
+  // These are the security rules for your Firebase Realtime Database.
+  // They are currently set to allow all reads and writes.
+  // This is not recommended for production environments.
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
